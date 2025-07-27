@@ -81,14 +81,15 @@ To use this MCP server with clients like Gemini CLI or Claude Desktop, you'll ne
         "TROPIPAY_CLIENT_ID": "your_client_id",
         "TROPIPAY_CLIENT_SECRET": "your_client_secret",
         "TROPIPAY_ENVIRONMENT": "sandbox",  // or "production"
-        "TROPIPAY_BASE_URL": "http://localhost:3001/"  // optional, for local development
+        "TROPIPAY_BASE_URL": "https://sandbox.tropipay.me" 
+         // Optional https://www.tropipay.com for live environment http://localhost:3001 for local development
       }
     }
   }
 }
 ```
 
-> **Note**: Replace `path/to/tropipay-mcp-server` with the actual path to your TropiPay MCP Server installation.
+> **Note**: Replace `path/to/tropipay-mcp-server` with the actual path to your TropiPay MCP Server installation. Use escape backslash in Windows `"D:\\folder\\tropipay-mcp-server\\` or `"/folder/tropipay-mcp-server/` in Linux/Mac
 
 ## 🏗️ Project Structure
 

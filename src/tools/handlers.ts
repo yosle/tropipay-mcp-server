@@ -14,8 +14,8 @@ export async function handleGetAccountBalance(context: ToolContext) {
     return {
       content: [{
         type: "text",
-        text: `💰 Current Default Account Balance\n\n` +
-          `Balance: $${balance.balance}\n` +
+        text: `💰 Current Default Account Balance (all amounts are in cents)\n\n` +
+          `Balance: ${JSON.stringify(balance)}\n` +
           `Environment: ${context.tropiPayConfig.environment}\n` +
           `Retrieved: ${new Date().toISOString()}`
       }]
@@ -79,28 +79,6 @@ export async function handleGetMovementList(args: any, context: ToolContext) {
       };
     }
 
-    // Return the complete JSON data for maximum LLM flexibility
-    let movementsJson;
-    try {
-      // Create a clean copy to avoid circular references
-      const cleanMovements = {
-        count: movements.count || 0,
-        rows: movements.rows || [],
-        // Include any other top-level properties but filter out potential problematic ones
-        ...(movements.offset !== undefined && { offset: movements.offset }),
-        ...(movements.limit !== undefined && { limit: movements.limit })
-      };
-      movementsJson = JSON.stringify(cleanMovements, null, 2);
-    } catch (jsonError) {
-      // Fallback to a safe representation if JSON serialization fails
-      movementsJson = JSON.stringify({
-        error: "JSON serialization failed",
-        count: movements?.count || 0,
-        rowsLength: movements?.rows?.length || 0,
-        message: "Raw data could not be serialized safely"
-      }, null, 2);
-    }
-
     return {
       content: [{
         type: "text",
@@ -108,7 +86,7 @@ export async function handleGetMovementList(args: any, context: ToolContext) {
           `Environment: ${context.tropiPayConfig.environment}\n` +
           `Retrieved: ${new Date().toISOString()}\n\n` +
           `💡 **Tip**: Use the 'tropipay_movements_schema' prompt for detailed field explanations.\n\n` +
-          `**Raw Data (JSON):**\n\`\`\`json\n${movementsJson}\n\`\`\``
+          `**Raw Data (JSON):**\n\`\`\`json\n${movements?.rows || []}\n\`\`\``
       }]
     };
   } catch (error) {
