@@ -1,70 +1,128 @@
-# Tropipay MCP Server MCP Server
+# TropiPay MCP Server
 
-A MCP Server to interact with Tropipay Payments Platform
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-43853D?logo=node.js&logoColor=white)](https://nodejs.org/)
 
-This is a TypeScript-based MCP server that implements a simple notes system. It demonstrates core MCP concepts by providing:
+A Model Context Protocol (MCP) server for interacting with TropiPay's payment platform. This server provides a standardized interface for AI assistants in various development environments to perform TropiPay operations through tools and resources.
 
-- Resources representing text notes with URIs and metadata
-- Tools for creating new notes
-- Prompts for generating summaries of notes
+## ✨ Features
 
-## Features
+- **Authentication**: Handles OAuth 2.0 client credentials flow with TropiPay
+- **Modular Architecture**: Clean separation of concerns with TypeScript
+- **TropiPay API Integration**: Comprehensive wrapper around TropiPay's functionality
+- **Tool-Based Interface**: Easy integration with AI assistants
+- **Environment Support**: Configure for sandbox or production environments
+- **Editor Compatibility**: Works with VS Code, Cursor, Windsurf, and other MCP-compatible editors
 
-### Resources
-- List and access notes via `note://` URIs
-- Each note has a title, content and metadata
-- Plain text mime type for simple content access
+## 🛠️ Available Tools
 
-### Tools
-- `create_note` - Create new text notes
-  - Takes title and content as required parameters
-  - Stores note in server state
+### Account Management
+- `get_account_balance`: Retrieve current account balance
+- `get_profile_data`: Get user profile information
+- `get_accounts`: List all TropiPay accounts
 
-### Prompts
-- `summarize_notes` - Generate a summary of all stored notes
-  - Includes all note contents as embedded resources
-  - Returns structured prompt for LLM summarization
+### Transactions
+- `get_movement_list`: View transaction history with pagination
+- `list_deposit_accounts`: List deposit accounts/beneficiaries
 
-## Development
+### Payment Links
+- `create_paymentcard`: Create payment links (called payment cards in TropiPay)
+  - **Required Fields**: reference, concept, amount, currency
+  - **Optional Fields**: description, favorite, singleUse, expirationDays, reasonId, lang, urlSuccess, urlFailed, urlNotification, serviceDate, directPayment
 
-Install dependencies:
-```bash
-npm install
-```
+### System
+- `test_connection`: Verify API connectivity and authentication
 
-Build the server:
-```bash
-npm run build
-```
+## 🚀 Getting Started
 
-For development with auto-rebuild:
-```bash
-npm run watch
-```
+### Prerequisites
 
-## Installation
+- Node.js 20+
+- npm or yarn
+- TropiPay API credentials (Client ID and Client Secret)
 
-To use with Claude Desktop, add the server config:
+### Installation
 
-On MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yosle/tropipay-mcp-server.git
+   cd tropipay-mcp-server
+   npm install
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### MCP Client Configuration
+
+To use this MCP server with clients like Gemini CLI or Claude Desktop, you'll need to add it to your client's configuration file:
+
+1. Locate your client's configuration file:
+   - **Claude Desktop**: 
+     - Windows: `%APPDATA%/Claude/claude_desktop_config.json`
+     - MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - **Gemini CLI**: Refer to Gemini's documentation for config file location
+
+2. Add the TropiPay MCP Server configuration:
 
 ```json
 {
   "mcpServers": {
+    // ... other MCP server configurations ...
     "Tropipay MCP Server": {
-      "command": "/path/to/Tropipay MCP Server/build/index.js"
+      "command": "node",
+      "args": [
+        "path/to/tropipay-mcp-server/build/index.js"
+      ],
+      "env": {
+        "TROPIPAY_CLIENT_ID": "your_client_id",
+        "TROPIPAY_CLIENT_SECRET": "your_client_secret",
+        "TROPIPAY_ENVIRONMENT": "sandbox",  // or "production"
+        "TROPIPAY_BASE_URL": "http://localhost:3001/"  // optional, for local development
+      }
     }
   }
 }
 ```
 
-### Debugging
+> **Note**: Replace `path/to/tropipay-mcp-server` with the actual path to your TropiPay MCP Server installation.
 
-Since MCP servers communicate over stdio, debugging can be challenging. We recommend using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector), which is available as a package script:
+## 🏗️ Project Structure
 
-```bash
-npm run inspector
+```
+src/
+├── client/         # TropiPay client initialization and management
+├── config/         # Configuration management
+├── resources/      # MCP resource handlers
+├── tools/          # Tool definitions and handlers
+│   ├── definitions.ts
+│   └── handlers.ts
+├── types/          # TypeScript type definitions
+└── index.ts        # Main server entry point
 ```
 
-The Inspector will provide a URL to access debugging tools in your browser.
+## 🔍 Usage Examples
+```prompt
+Get a list of my beneficiaries 
+```
+
+### Getting Account Balance
+
+```
+Get the balance in all my Tropipay accounts 
+```
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📧 Contact
+
+For questions or support, please open an issue on GitHub.
