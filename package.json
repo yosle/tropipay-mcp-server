@@ -14,13 +14,14 @@
     "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
     "prepare": "npm run build",
     "watch": "tsc --watch",
-    "inspector": "npx @modelcontextprotocol/inspector build/index.js"
+    "inspector": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector node build/index.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "0.6.0",
     "@yosle/tropipayjs": "^0.2.1"
   },
   "devDependencies": {
+    "@modelcontextprotocol/inspector": "^0.16.1",
     "@types/node": "^20.11.24",
     "typescript": "^5.3.3"
   }
