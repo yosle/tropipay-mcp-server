@@ -229,15 +229,14 @@ export async function handleCreatePaymentCard(args: any, context: ToolContext) {
       urlFailed,
       urlNotification,
       serviceDate,
-      directPayment
     } = args as PaymentCardPayload;
 
     // Validate required fields and collect missing ones
     const requiredFields = {
-      reference: "Unique reference identifier for the payment",
+      description: "Extra description of what is being paid",
       concept: "Payment concept/title",
       amount: "Payment amount (in cents, e.g., 3000 = $30.00)",
-      currency: "Payment currency (USD, EUR, etc.)"
+      currency: "Payment currency (allowed only : USD, EUR, USDC)"
     };
 
     const missingFields: string[] = [];
@@ -260,13 +259,10 @@ export async function handleCreatePaymentCard(args: any, context: ToolContext) {
             `📝 **Please provide all required fields:**\n\n` +
             `Example usage:\n\`\`\`\n` +
             `{\n` +
-            `  "reference": "my-payment-001",\n` +
             `  "concept": "Product Purchase",\n` +
             `  "amount": 5000,\n` +
             `  "currency": "USD",\n` +
             `  "description": "Purchase of premium service", // optional\n` +
-            `  "singleUse": "true", // optional\n` +
-            `  "expirationDays": 7 // optional\n` +
             `}\n\`\`\`\n\n` +
             `💡 **Note**: Amount should be in cents (e.g., 5000 = $50.00)`
         }]
@@ -279,17 +275,16 @@ export async function handleCreatePaymentCard(args: any, context: ToolContext) {
       concept: concept!,
       amount: amount!,
       currency: currency!,
-      ...(description && { description }),
-      ...(favorite && { favorite }),
-      ...(singleUse && { singleUse }),
-      ...(expirationDays && { expirationDays }),
-      ...(reasonId && { reasonId }),
-      ...(lang && { lang }),
-      ...(urlSuccess && { urlSuccess }),
-      ...(urlFailed && { urlFailed }),
-      ...(urlNotification && { urlNotification }),
-      ...(serviceDate && { serviceDate }),
-      ...(directPayment && { directPayment })
+      singleUse: singleUse !== undefined ? singleUse : false,
+      description: description !== undefined ? description : "",
+      favorite: favorite !== undefined ? favorite : false,
+      expirationDays: expirationDays !== undefined ? expirationDays : 0,
+      reasonId: reasonId !== undefined ? reasonId : 21,
+      lang: lang !== undefined ? lang : "es",
+      urlSuccess: urlSuccess !== undefined ? urlSuccess : "",
+      urlFailed: urlFailed !== undefined ? urlFailed : "",
+      urlNotification: urlNotification !== undefined ? urlNotification : "",
+      serviceDate: serviceDate !== undefined ? serviceDate : new Date().toISOString().split('T')[0],
     };
 
     // Create the payment card using tropipayjs
@@ -301,10 +296,20 @@ export async function handleCreatePaymentCard(args: any, context: ToolContext) {
         type: "text",
         text: `✅ Payment Card Created Successfully\n\n` +
           `🎯 **Payment Details:**\n` +
-          `- Reference: ${reference}\n` +
-          `- Concept: ${concept}\n` +
-          `- Amount: ${(amount! / 100).toFixed(2)} ${currency}\n` +
-          `- Currency: ${currency}\n` +
+          `- Paymentcard id: ${result.id}\n` +
+          `- Amount: ${(result.amount! / 100).toFixed(2)} ${result.currency}\n` +
+          `- Short url: ${result.shortUrl}\n`+
+          `- Reference: ${result.reference}\n` +
+          `- Concept: ${result.concept}\n` +
+          `- Marked as favorite: ${result.favorite}\n` +
+          `- Single use paymentcard: ${result.singleUse}\n` +
+          `- Expiration days: ${result.expirationDays}\n` +
+          `- Reason id: ${result.reasonId}\n` +
+          `- Language: ${result.lang}\n` +
+          `- Url success: ${result.urlSuccess}\n` +
+          `- Url failed: ${result.urlFailed}\n` +
+          `- Url notification: ${result.urlNotification}\n` +
+          `- Service date: ${result.serviceDate}\n` +
           `${description ? `- Description: ${description}\n` : ''}` +
           `\n📋 **API Response:**\n\`\`\`json\n${JSON.stringify(result, null, 2)}\n\`\`\`\n\n` +
           `Environment: ${context.tropiPayConfig.environment}\n` +
@@ -316,13 +321,7 @@ export async function handleCreatePaymentCard(args: any, context: ToolContext) {
       content: [{
         type: "text",
         text: `❌ Failed to create payment card\n\n` +
-          `Error: ${error instanceof Error ? error.message : 'Unknown error'}\n\n` +
-          `📝 Possible causes:\n` +
-          `- Invalid card details (reference, concept, amount)\n` +
-          `- Insufficient permissions to create payment cards\n` +
-          `- API endpoint not available in current environment\n` +
-          `- Network connectivity issues\n` +
-          `- Invalid amount format or currency\n\n` +
+          `Error: ${JSON.stringify(error)}\n\n` +
           `🔧 Technical details:\n` +
           `Environment: ${context.tropiPayConfig.environment}\n` +
           `Method attempted: client.paymentCards.create()`

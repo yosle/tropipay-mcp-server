@@ -98,90 +98,88 @@ export const toolDefinitions = [
   },
   {
     name: "create_paymentcard",
-    description: "Create a new payment card (payment link) using TropiPay API.\n\n" +
-      "📋 **Required Fields:**\n" +
-      "- `reference`: Unique reference identifier for the payment\n" +
-      "- `concept`: Payment concept/title\n" +
-      "- `amount`: Payment amount (in cents, e.g., 3000 = $30.00)\n" +
-      "- `currency`: Payment currency (USD, EUR, etc.)\n\n" +
+    description: "Create a new payment card (payment link) using TropiPay API.\n" +
+      "**IMPORTANT: Always ask the user for required information before creating the payment card. Do not assume or generate default values without user confirmation.**\n\n"+
+      "📋 **Required Information to Collect from User:**\n"+
+      " - `amount`, `currency`, `concept`, `description`\n"+
+      "- Any specific requirements (expiration, single use, etc.)\n\n"+
+      "🔍 **Process Flow:**\n" +
+      "1. First ask user for: amount, currency, concept, and description\n"+
+      "2. Optionally ask about: expiration days, single use, reference, redirect URLs\n"+
+      "3. Then create the payment card with provided information\n\n"+
       "📋 **Optional Fields:**\n" +
-      "- `description`: Additional description for the payment\n" +
-      "- `favorite`: Mark as favorite (true/false)\n" +
-      "- `singleUse`: Whether the link can be used only once (true/false)\n" +
-      "- `expirationDays`: Number of days until expiration\n" +
-      "- `reasonId`: Reason ID for the payment\n" +
-      "- `lang`: Language code (es, en, etc.)\n" +
-      "- `urlSuccess`: Success redirect URL\n" +
-      "- `urlFailed`: Failed payment redirect URL\n" +
-      "- `urlNotification`: Webhook notification URL\n" +
-      "- `serviceDate`: Service date (YYYY-MM-DD format)\n" +
-      "- `directPayment`: Enable direct payment (true/false)\n\n" +
-      "⚠️ **Important**: All mandatory fields must be provided. If any are missing, you will be prompted to provide them.",
+      "- `reference`\n" +
+      "- `favorite`\n" +
+      "- `singleUse`\n" +
+      "- `expirationDays`\n" +
+      "- `reasonId`\n" +
+      "- `lang`\n" +
+      "- `urlSuccess`\n" +
+      "- `urlFailed`\n" +
+      "- `urlNotification`\n" +
+      "- `serviceDate`\n" +
+      "⚠️ **Important**: All required fields must be provided. If any are missing, you will be prompted to provide them.",
     inputSchema: {
       type: "object",
       properties: {
         reference: {
           type: "string",
-          description: "Unique reference identifier for the payment"
+          description: "Unique reference identifier for the payment. Required. generate if not provided"
         },
         concept: {
           type: "string",
-          description: "Payment concept/title"
+          description: "Payment concept/title. REQUIRED - Must be provided by user, do not generate default values"
         },
         amount: {
           type: "number",
-          description: "Payment amount in cents (e.g., 3000 = $30.00)"
+          description: "Payment amount in cents (e.g., 3000 = $30.00). REQUIRED - Must be provided by user, do not generate default values"
         },
         currency: {
           type: "string",
-          description: "Payment currency (USD, EUR, etc.)"
+          description: "Payment currency (allowed: USD, EUR, USDC). REQUIRED - Must be provided by user, do not generate default values"
         },
         description: {
           type: "string",
-          description: "Additional description for the payment (optional)"
+          description: "Additional description for the payment. REQUIRED - Must be provided by user generate default values"
         },
         favorite: {
           type: "string",
-          description: "Mark as favorite - true or false (optional)"
+          description: "Mark as favorite - true or false REQUIRED (set false if not provided)"
         },
         singleUse: {
           type: "string",
-          description: "Whether the link can be used only once - true or false (optional)"
+          description: "Whether the link can be used only once - true or false REQUIRED (set false if not provided)"
         },
         expirationDays: {
           type: "number",
-          description: "Number of days until expiration (optional)"
+          description: "Number of days until expiration REQUIRED (set 0 if not provided)"
         },
         reasonId: {
           type: "number",
-          description: "Reason ID for the payment (optional)"
+          description: "Reason ID for the payment. REQUIRED - set 21 if not provided"
         },
         lang: {
           type: "string",
-          description: "Language code like es, en (optional)"
+          description: "Language code like es, en (optional, set by user profile if not provided)"
         },
         urlSuccess: {
           type: "string",
-          description: "Success redirect URL (optional)"
+          description: "Success redirect URL. REQUIRED. Set empty string if not provided"
         },
         urlFailed: {
           type: "string",
-          description: "Failed payment redirect URL (optional)"
+          description: "Failed payment redirect URL. REQUIRED. Set empty string if not provided"
         },
         urlNotification: {
           type: "string",
-          description: "Webhook notification URL (optional)"
+          description: "Webhook notification URL. REQUIRED. Set empty string if not provided"
         },
         serviceDate: {
           type: "string",
-          description: "Service date in YYYY-MM-DD format (optional)"
+          description: "Service date in YYYY-MM-DD format REQUIRED. will be set today date by the mcp if not provided)"
         },
-        directPayment: {
-          type: "string",
-          description: "Enable direct payment - true or false (optional)"
-        }
       },
-      required: ["reference", "concept", "amount", "currency"]
+      required: ["concept", "amount", "currency"]
     }
   },
   {
