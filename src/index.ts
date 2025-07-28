@@ -100,7 +100,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
     switch (request.params.name) {
-      case "get_account_balance":
+      case "get_default_account_balance":
         return await handleGetAccountBalance(toolContext);
       
       case "get_profile_data":
@@ -109,7 +109,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case "get_movement_list":
         return await handleGetMovementList(request.params.arguments, toolContext);
       
-      case "get_accounts":
+      case "get_accounts_list":
         return await handleGetAccounts(toolContext);
       
       case "list_deposit_accounts":

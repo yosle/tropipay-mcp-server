@@ -19,7 +19,7 @@ A Model Context Protocol (MCP) server for interacting with TropiPay's payment pl
 ## 🛠️ Available Tools
 
 ### Account Management
-- `get_account_balance`: Retrieve current account balance
+- `get_default_account_balance`: Retrieve current default account balance
 - `get_profile_data`: Get user profile information
 - `get_accounts`: List all TropiPay accounts
 

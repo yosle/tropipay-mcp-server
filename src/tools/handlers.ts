@@ -5,7 +5,7 @@
 import { ToolContext, PaymentCardPayload } from '../types/index.js';
 
 /**
- * Handle get_account_balance tool
+ * Handle get_default_account_balance tool
  */
 export async function handleGetAccountBalance(context: ToolContext) {
   try {
@@ -100,7 +100,7 @@ export async function handleGetMovementList(args: any, context: ToolContext) {
 }
 
 /**
- * Handle get_accounts tool
+ * Handle get_accounts_list tool
  */
 export async function handleGetAccounts(context: ToolContext) {
   try {

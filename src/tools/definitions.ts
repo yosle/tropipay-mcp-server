@@ -4,8 +4,8 @@
 
 export const toolDefinitions = [
   {
-    name: "get_account_balance",
-    description: "Get the current account balance from TropiPay (requires ALLOW_GET_BALANCE scope)",
+    name: "get_default_account_balance",
+    description: "Get the current selected as default account balance from TropiPay",
     inputSchema: {
       type: "object",
       properties: {},
@@ -14,7 +14,7 @@ export const toolDefinitions = [
   },
   {
     name: "get_profile_data",
-    description: "Get user profile information from TropiPay (requires ALLOW_GET_PROFILE_DATA scope)",
+    description: "Get user profile information from TropiPay account",
     inputSchema: {
       type: "object",
       properties: {},
@@ -64,7 +64,7 @@ export const toolDefinitions = [
     }
   },
   {
-    name: "get_accounts",
+    name: "get_accounts_list",
     description: "Get list of TropiPay accounts associated with the user",
     inputSchema: {
       type: "object",
@@ -74,8 +74,8 @@ export const toolDefinitions = [
   },
   {
     name: "list_deposit_accounts",
-    description: "Get list of deposit accounts(a.k.a beneficiaries) available for the user.\n\n" +
-      "💡 **Tip**: depositaccount are also refered as beneficiaries can be internal(other Tropipay accounts) " +
+    description: "Get list of deposit accounts (a.k.a beneficiaries).\n\n" +
+      "💡 **Tip**: deposit accounts are also refered as beneficiaries can be internal (other Tropipay accounts) " +
       "or external (bank accounts, external cripto wallets)\n\n" +
       "📋 **Response Structure:**\n" +
       "- `Array of depositaccounts objects:\n" +
@@ -83,7 +83,7 @@ export const toolDefinitions = [
       "- `accountNumber`: IBAN for external bank accounts, wallet address for external crypto accounts, email of user for internal beneficiaries)\n" +
       "- `alias`: if not null, User-friendly account name/alias set by user\n" +
       "- `currency`: Account currency\n" +
-      "- `type`: Account type (9=Tropipay account, 12=crypto, 7=Other, 8=BANDEC card, 4= BPA card, 3=BANMET card)\n" +
+      "- `type`: Account type (9=Tropipay account, 12=Crypto wallet, 7=Other, 8=BANDEC card, 4= BPA card, 3=BANMET card)\n" +
       "- `state`: Account status (0=Active, 1=Inactive, 2=Deleted)\n" +
       "- `countrydestination`: Object with info about the country where the account is registered,slug, name etc\n" +
       "- `userRelationTypeId`: Type of relation with the user (0=myself, 3=commercial)\n" +
@@ -99,14 +99,14 @@ export const toolDefinitions = [
   {
     name: "create_paymentcard",
     description: "Create a new payment card (payment link) using TropiPay API.\n" +
-      "**IMPORTANT: Always ask the user for required information before creating the payment card. Do not assume or generate default values without user confirmation.**\n\n"+
-      "📋 **Required Information to Collect from User:**\n"+
+      "**IMPORTANT:**"+
+      "- NEVER create payment cards without first asking the user for required information"+
+      "- ALWAYS collect: amount, currency, concept, and description before proceeding"+ 
+      "- DO NOT generate or assume default values for required fields"+
+      "- Ask clarifying questions if any information is missing or unclear"+
+      "**Required Information to Collect from User:**\n" +
       " - `amount`, `currency`, `concept`, `description`\n"+
       "- Any specific requirements (expiration, single use, etc.)\n\n"+
-      "🔍 **Process Flow:**\n" +
-      "1. First ask user for: amount, currency, concept, and description\n"+
-      "2. Optionally ask about: expiration days, single use, reference, redirect URLs\n"+
-      "3. Then create the payment card with provided information\n\n"+
       "📋 **Optional Fields:**\n" +
       "- `reference`\n" +
       "- `favorite`\n" +
@@ -118,7 +118,12 @@ export const toolDefinitions = [
       "- `urlFailed`\n" +
       "- `urlNotification`\n" +
       "- `serviceDate`\n" +
-      "⚠️ **Important**: All required fields must be provided. If any are missing, you will be prompted to provide them.",
+      "🔍 **Process Flow:**\n" +
+      "1. First ask user for: amount, currency, concept, and description\n"+
+      "2. Optionally ask about: expiration days, single use, reference, redirect URLs\n"+
+      "3. Then create the payment card with provided information\n\n"+
+      "4. Return the payment card information to the user\n\n"
+,
     inputSchema: {
       type: "object",
       properties: {
@@ -184,7 +189,7 @@ export const toolDefinitions = [
   },
   {
     name: "test_connection",
-    description: "Test the connection to TropiPay API and verify authentication",
+    description: "Test the connection to TropiPay API and verify authentication by retrieving the selected default account balance",
     inputSchema: {
       type: "object",
       properties: {},
