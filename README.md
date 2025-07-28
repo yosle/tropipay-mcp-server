@@ -1,8 +1,9 @@
 # TropiPay MCP Server
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![](https://badge.mcpx.dev?type=server 'MCP Server')
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-43853D?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A Model Context Protocol (MCP) server for interacting with TropiPay's payment platform. This server provides a standardized interface for AI assistants in various development environments to perform TropiPay operations through tools and resources.
 
