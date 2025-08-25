@@ -21,19 +21,38 @@ A Model Context Protocol (MCP) server for interacting with TropiPay's payment pl
 ### Account Management
 - `get_default_account_balance`: Retrieve current default account balance
 - `get_profile_data`: Get user profile information
-- `get_accounts`: List all TropiPay accounts
+- `get_accounts_list`: List all TropiPay accounts
 
 ### Transactions
 - `get_movement_list`: View transaction history with pagination
-- `list_deposit_accounts`: List deposit accounts/beneficiaries
+- `list_deposit_accounts`: List deposit accounts/beneficiaries (bank accounts, crypto wallets, etc.)
+- `list_paymentcards`: Get list of payment cards (payment links) created by the user
+
+### Beneficiary Management
+- `create_internal_beneficiary`: Create a new internal TropiPay beneficiary
+  - **Required Fields**: alias, searchValue (email)
+- `create_external_beneficiary`: Create a new external bank account beneficiary
+  - **Required Fields**: firstName, lastName, accountNumber, currency, countryDestinationId/countryISO
+- `create_crypto_beneficiary`: Create a new crypto wallet beneficiary
+  - **Required Fields**: firstName, lastName, accountNumber (wallet address), currency, network
 
 ### Payment Links
 - `create_paymentcard`: Create payment links (called payment cards in TropiPay)
-  - **Required Fields**: reference, concept, amount, currency
-  - **Optional Fields**: description, favorite, singleUse, expirationDays, reasonId, lang, urlSuccess, urlFailed, urlNotification, serviceDate, directPayment
+  - **Required Fields**: amount, currency, concept, description
+  - **Optional Fields**: reference, favorite, singleUse, expirationDays, reasonId, lang, urlSuccess, urlFailed, urlNotification, serviceDate, accountId
 
 ### System
 - `test_connection`: Verify API connectivity and authentication
+
+## 📚 Available Resources
+
+The TropiPay MCP Server provides the following reference resources:
+
+- `tropipay://config`: Current TropiPay API configuration and environment settings
+- `tropipay://status`: TropiPay API connection status and health check
+- `tropipay://movement-types`: Complete reference of TropiPay movementType IDs and their meanings
+- `tropipay://movement-states`: Complete reference of TropiPay movement state codes and their meanings
+- `tropipay://account-states`: Complete reference of TropiPay account state codes and their meanings
 
 ## 🚀 Getting Started
 
@@ -59,13 +78,13 @@ A Model Context Protocol (MCP) server for interacting with TropiPay's payment pl
 
 ### MCP Client Configuration
 
-To use this MCP server with clients like Gemini CLI or Claude Desktop, you'll need to add it to your client's configuration file:
+You can use this MCP server with any compatible client like LM Studio, Ollama,Copilot, Windsurf, Gemini CLI or Claude Desktop, you'll need to add it to your client's configuration file:
 
 1. Locate your client's configuration file:
    - **Claude Desktop**: 
      - Windows: `%APPDATA%/Claude/claude_desktop_config.json`
      - MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-   - **Gemini CLI**: Refer to Gemini's documentation for config file location
+   - **Gemini CLI and others**: Refer to tehe respective documentation for config file location
 
 2. Add the TropiPay MCP Server configuration:
 
