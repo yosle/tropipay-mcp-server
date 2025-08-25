@@ -464,22 +464,9 @@ export async function handleCreateExternalBeneficiary(args: any, context: ToolCo
     const client = context.getTropiPayClient();
     const result = await client.depositAccounts.create(depositAccountData);
 
-    // Check if the response contains an error
+    // Check if the response contains an error and throw it to be caught in the catch block
     if (result.error || result.code >= 400) {
-      return {
-        content: [{
-          type: "text",
-          text: `❌ Failed to create external bank account beneficiary\n\n` +
-            `Error: ${result.message || (result.error ? result.error.message : 'Unknown error')}\n\n` +
-            `🔧 Technical details:\n` +
-            `Code: ${result.code}\n` +
-            `Type: ${result.error?.type || 'N/A'}\n` +
-            `Details: ${JSON.stringify(result.error?.details || [])}\n` +
-            `Message: ${result.error?.i18n || result.error?.message || 'No additional message'}\n\n` +
-            `📋 **API Response:**\n\`\`\`json\n${JSON.stringify(result, null, 2)}\n\`\`\`\n\n` +
-            `Environment: ${context.tropiPayConfig.environment}\n`
-        }]
-      };
+      throw result;
     }
 
     // Format success response
@@ -497,13 +484,40 @@ export async function handleCreateExternalBeneficiary(args: any, context: ToolCo
           `Environment: ${context.tropiPayConfig.environment}\n`
       }]
     };
-  } catch (error) {
+  } catch (error: unknown) {
+    // Format error response based on error type
+    let errorMessage: string;
+    
+    // Check if error is an API response with error details
+    if (typeof error === 'object' && error !== null && 'error' in error) {
+      const apiError = error as { 
+        error?: { 
+          message?: string; 
+          type?: string; 
+          details?: any[]; 
+          i18n?: string 
+        }; 
+        message?: string; 
+        code?: number 
+      };
+      
+      errorMessage = `Error: ${apiError.message || (apiError.error?.message || 'Unknown error')}\n\n` +
+        `🔧 Technical details:\n` +
+        `Code: ${apiError.code || 'N/A'}\n` +
+        `Type: ${apiError.error?.type || 'N/A'}\n` +
+        `Details: ${JSON.stringify(apiError.error?.details || [])}\n` +
+        `Message: ${apiError.error?.i18n || apiError.error?.message || 'No additional message'}`;
+    } else {
+      // Handle standard Error objects or other types
+      errorMessage = `Error: ${error instanceof Error ? error.message : JSON.stringify(error)}`;
+    }
+      
     return {
       content: [{
         type: "text",
         text: `❌ Failed to create external bank account beneficiary\n\n` +
-          `Error: ${error instanceof Error ? error.message : JSON.stringify(error)}\n\n` +
-          `🔧 Technical details:\n` +
+          `${errorMessage}\n\n` +
+          `📋 **API Response:**\n\`\`\`json\n${JSON.stringify(error instanceof Error ? { message: error.message } : error, null, 2)}\n\`\`\`\n\n` +
           `Environment: ${context.tropiPayConfig.environment}\n` +
           `Method attempted: client.depositAccounts.create()`
       }]
@@ -553,16 +567,9 @@ export async function handleCreateInternalBeneficiary(args: any, context: ToolCo
     const client = context.getTropiPayClient();
     const result = await client.depositAccounts.create(depositAccountData);
 
-    // Check if the response contains an error
+    // Check if the response contains an error and throw it to be caught in the catch block
     if (result.error || result.code >= 400) {
-      return {
-        content: [{
-          type: "text",
-          text: `❌ Failed to create internal TropiPay beneficiary\n\n` +
-            `📋 **API Response:**\n\`\`\`json\n${JSON.stringify(result, null, 2)}\n\`\`\`\n\n` +
-            `Environment: ${context.tropiPayConfig.environment}\n`
-        }]
-      };
+      throw result;
     }
 
     // Format success response
@@ -577,13 +584,40 @@ export async function handleCreateInternalBeneficiary(args: any, context: ToolCo
           `Environment: ${context.tropiPayConfig.environment}\n`
       }]
     };
-  } catch (error) {
+  } catch (error: unknown) {
+    // Format error response based on error type
+    let errorMessage: string;
+    
+    // Check if error is an API response with error details
+    if (typeof error === 'object' && error !== null && 'error' in error) {
+      const apiError = error as { 
+        error?: { 
+          message?: string; 
+          type?: string; 
+          details?: any[]; 
+          i18n?: string 
+        }; 
+        message?: string; 
+        code?: number 
+      };
+      
+      errorMessage = `Error: ${apiError.message || (apiError.error?.message || 'Unknown error')}\n\n` +
+        `🔧 Technical details:\n` +
+        `Code: ${apiError.code || 'N/A'}\n` +
+        `Type: ${apiError.error?.type || 'N/A'}\n` +
+        `Details: ${JSON.stringify(apiError.error?.details || [])}\n` +
+        `Message: ${apiError.error?.i18n || apiError.error?.message || 'No additional message'}`;
+    } else {
+      // Handle standard Error objects or other types
+      errorMessage = `Error: ${error instanceof Error ? error.message : JSON.stringify(error)}`;
+    }
+      
     return {
       content: [{
         type: "text",
         text: `❌ Failed to create internal TropiPay beneficiary\n\n` +
-          `Error: ${error instanceof Error ? error.message : JSON.stringify(error)}\n\n` +
-          `🔧 Technical details:\n` +
+          `${errorMessage}\n\n` +
+          `📋 **API Response:**\n\`\`\`json\n${JSON.stringify(error instanceof Error ? { message: error.message } : error, null, 2)}\n\`\`\`\n\n` +
           `Environment: ${context.tropiPayConfig.environment}\n` +
           `Method attempted: client.depositAccounts.create()`
       }]
@@ -634,22 +668,9 @@ export async function handleCreateCryptoBeneficiary(args: any, context: ToolCont
     const client = context.getTropiPayClient();
     const result = await client.depositAccounts.create(depositAccountData);
 
-    // Check if the response contains an error
+    // Check if the response contains an error and throw it to be caught in the catch block
     if (result.error || result.code >= 400) {
-      return {
-        content: [{
-          type: "text",
-          text: `❌ Failed to create crypto wallet beneficiary\n\n` +
-            `Error: ${result.message || (result.error ? result.error.message : 'Unknown error')}\n\n` +
-            `🔧 Technical details:\n` +
-            `Code: ${result.code}\n` +
-            `Type: ${result.error?.type || 'N/A'}\n` +
-            `Details: ${JSON.stringify(result.error?.details || [])}\n` +
-            `Message: ${result.error?.i18n || result.error?.message || 'No additional message'}\n\n` +
-            `📋 **API Response:**\n\`\`\`json\n${JSON.stringify(result, null, 2)}\n\`\`\`\n\n` +
-            `Environment: ${context.tropiPayConfig.environment}\n`
-        }]
-      };
+      throw result;
     }
 
     // Format success response
@@ -666,13 +687,40 @@ export async function handleCreateCryptoBeneficiary(args: any, context: ToolCont
           `Environment: ${context.tropiPayConfig.environment}\n`
       }]
     };
-  } catch (error) {
+  } catch (error: unknown) {
+    // Format error response based on error type
+    let errorMessage: string;
+    
+    // Check if error is an API response with error details
+    if (typeof error === 'object' && error !== null && 'error' in error) {
+      const apiError = error as { 
+        error?: { 
+          message?: string; 
+          type?: string; 
+          details?: any[]; 
+          i18n?: string 
+        }; 
+        message?: string; 
+        code?: number 
+      };
+      
+      errorMessage = `Error: ${apiError.message || (apiError.error?.message || 'Unknown error')}\n\n` +
+        `🔧 Technical details:\n` +
+        `Code: ${apiError.code || 'N/A'}\n` +
+        `Type: ${apiError.error?.type || 'N/A'}\n` +
+        `Details: ${JSON.stringify(apiError.error?.details || [])}\n` +
+        `Message: ${apiError.error?.i18n || apiError.error?.message || 'No additional message'}`;
+    } else {
+      // Handle standard Error objects or other types
+      errorMessage = `Error: ${error instanceof Error ? error.message : JSON.stringify(error)}`;
+    }
+      
     return {
       content: [{
         type: "text",
         text: `❌ Failed to create crypto wallet beneficiary\n\n` +
-          `Error: ${error instanceof Error ? error.message : JSON.stringify(error)}\n\n` +
-          `🔧 Technical details:\n` +
+          `${errorMessage}\n\n` +
+          `📋 **API Response:**\n\`\`\`json\n${JSON.stringify(error instanceof Error ? { message: error.message } : error, null, 2)}\n\`\`\`\n\n` +
           `Environment: ${context.tropiPayConfig.environment}\n` +
           `Method attempted: client.depositAccounts.create()`
       }]
