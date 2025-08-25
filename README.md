@@ -81,9 +81,11 @@ To use this MCP server with clients like Gemini CLI or Claude Desktop, you'll ne
       "env": {
         "TROPIPAY_CLIENT_ID": "your_client_id",
         "TROPIPAY_CLIENT_SECRET": "your_client_secret",
-        "TROPIPAY_ENVIRONMENT": "sandbox",  // or "production"
         "TROPIPAY_BASE_URL": "https://sandbox.tropipay.me" 
-         // Optional https://www.tropipay.com for live environment http://localhost:3001 for local development
+         /* Optional https://www.tropipay.com for live environment,
+            https://sandbox.tropipay.me for sandbox or other for local development,
+            mock server for testing etc 
+         */
       }
     }
   }
