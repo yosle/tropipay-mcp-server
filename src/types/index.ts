@@ -31,6 +31,28 @@ export interface PaymentCardPayload {
   urlNotification?: string;
   serviceDate?: string;
   directPayment?: string;
+  accountId?: number;
+}
+
+/**
+ * Deposit Account (Beneficiary) creation payload
+ */
+export interface DepositAccountPayload {
+  alias: string;
+  firstName: string;
+  lastName: string;
+  email?: string;
+  accountNumber: string;
+  currency: string;
+  countryDestinationId: number;
+  bankName?: string;
+  swift?: string;
+  type: number;
+  userRelationTypeId?: number;
+  documentId?: string;
+  phoneNumber?: string;
+  address?: string;
+  state?: number;
 }
 
 /**

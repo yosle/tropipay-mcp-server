@@ -30,15 +30,19 @@ import { getTropiPayConfig } from './config/index.js';
 import { getTropiPayClient } from './client/index.js';
 import { getResourceList, handleResourceRead } from './resources/index.js';
 import { toolDefinitions } from './tools/definitions.js';
-import {
-  handleGetAccountBalance,
-  handleGetProfileData,
-  handleGetMovementList,
-  handleGetAccounts,
-  handleListDepositAccounts,
-  handleCreatePaymentCard,
-  handleTestConnection
-} from './tools/handlers.js';
+import { 
+  handleGetAccountBalance, 
+  handleGetProfileData, 
+  handleGetMovementList, 
+  handleGetAccounts, 
+  handleListDepositAccounts, 
+  handleCreatePaymentCard, 
+  handleTestConnection, 
+  handleListPaymentcards,
+  handleCreateExternalBeneficiary,
+  handleCreateInternalBeneficiary,
+  handleCreateCryptoBeneficiary
+} from "./tools/handlers.js";
 import { getPromptList, handlePrompt } from './prompts/index.js';
 import { ToolContext } from './types/index.js';
 
@@ -120,6 +124,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       
       case "test_connection":
         return await handleTestConnection(toolContext);
+
+      case "list_paymentcards":
+        return await handleListPaymentcards(toolContext);
+      
+      case "create_external_beneficiary":
+        return await handleCreateExternalBeneficiary(request.params.arguments, toolContext);
+      
+      case "create_internal_beneficiary":
+        return await handleCreateInternalBeneficiary(request.params.arguments, toolContext);
+      
+      case "create_crypto_beneficiary":
+        return await handleCreateCryptoBeneficiary(request.params.arguments, toolContext);
       
       default:
         throw new Error(`Unknown tool: ${request.params.name}`);

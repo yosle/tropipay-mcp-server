@@ -123,8 +123,7 @@ export const toolDefinitions = [
       "1. First ask user for: amount, currency, concept, and description\n"+
       "2. Optionally ask about: expiration days, single use, reference, redirect URLs\n"+
       "3. Then create the payment card with provided information\n\n"+
-      "4. Return the payment card information to the user\n\n"
-,
+      "4. Return the payment card information to the user\n\n",
     inputSchema: {
       type: "object",
       properties: {
