@@ -2,10 +2,11 @@
   "name": "tropipay-mcp-server",
   "version": "0.1.0",
   "description": "A MCP Server to interact with Tropipay Payments Platform",
-  "private": true,
+  "author": "Yosle",
+  "license": "MIT",
   "type": "module",
   "bin": {
-    "Tropipay MCP Server": "./build/index.js"
+    "tropipay-mcp-server": "./build/index.js"
   },
   "files": [
     "build"
@@ -24,5 +25,18 @@
     "@modelcontextprotocol/inspector": "^0.16.1",
     "@types/node": "^20.11.24",
     "typescript": "^5.3.3"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "tropipay",
+    "payments",
+    "wallet",
+    "ai",
+    "llm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yosle/tropipay-mcp-server.git"
   }
 }
