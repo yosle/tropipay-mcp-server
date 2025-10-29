@@ -78,40 +78,90 @@ The TropiPay MCP Server provides the following reference resources:
 
 ### MCP Client Configuration
 
-You can use this MCP server with any compatible client like LM Studio, Ollama,Copilot, Windsurf, Gemini CLI or Claude Desktop, you'll need to add it to your client's configuration file:
+This MCP server can be used with any MCP-compatible client such as Claude Desktop, Windsurf, Cline, or other AI assistants that support the Model Context Protocol.
 
-1. Locate your client's configuration file:
-   - **Claude Desktop**: 
-     - Windows: `%APPDATA%/Claude/claude_desktop_config.json`
-     - MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-   - **Gemini CLI and others**: Refer to tehe respective documentation for config file location
+#### Configuration File Locations
 
-2. Add the TropiPay MCP Server configuration:
+Locate your client's MCP configuration file:
+
+- **Claude Desktop**:
+  - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+  - MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+  - Linux: `~/.config/Claude/claude_desktop_config.json`
+
+- **Windsurf**:
+  - Windows: `%USERPROFILE%\.codeium\windsurf\mcp_config.json`
+  - MacOS: `~/.codeium/windsurf/mcp_config.json`
+  - Linux: `~/.codeium/windsurf/mcp_config.json`
+
+- **Cline**: Refer to the [Cline documentation](https://github.com/cline/cline) for configuration details
+
+#### Installation Methods
+
+##### Option 1: Using npx (Recommended)
+
+You can run the server directly with npx:
 
 ```json
 {
   "mcpServers": {
-    // ... other MCP server configurations ...
-    "Tropipay MCP Server": {
-      "command": "node",
-      "args": [
-        "path/to/tropipay-mcp-server/build/index.js"
-      ],
+    "tropipay": {
+      "command": "npx",
+      "args": ["-y", "tropipay-mcp-server"],
       "env": {
         "TROPIPAY_CLIENT_ID": "your_client_id",
         "TROPIPAY_CLIENT_SECRET": "your_client_secret",
-        "TROPIPAY_BASE_URL": "https://sandbox.tropipay.me" 
-         /* Optional https://www.tropipay.com for live environment,
-            https://sandbox.tropipay.me for sandbox or other for local development,
-            mock server for testing etc 
-         */
+        "TROPIPAY_BASE_URL": "https://sandbox.tropipay.me"
       }
     }
   }
 }
 ```
 
-> **Note**: Replace `path/to/tropipay-mcp-server` with the actual path to your TropiPay MCP Server installation. Use escape backslash in Windows `"D:\\folder\\tropipay-mcp-server\\` or `"/folder/tropipay-mcp-server/` in Linux/Mac
+##### Option 2: Local Development/Installation
+
+For local development or if you've cloned the repository:
+
+```json
+{
+  "mcpServers": {
+    "Tropipay MCP Server": {
+      "command": "node",
+      "args": [
+        "D:\\proyectos\\tropipay-mcp-server\\tropipay-mcp-server\\build\\index.js"
+      ],
+      "env": {
+        "TROPIPAY_CLIENT_ID": "your_client_id",
+        "TROPIPAY_CLIENT_SECRET": "your_client_secret",
+        "TROPIPAY_BASE_URL": "https://sandbox.tropipay.me"
+      }
+    }
+  }
+}
+```
+
+#### Environment Variables
+
+Configure the following environment variables in your MCP client configuration:
+
+| Variable | Required | Description | Default |
+|----------|----------|-------------|---------|
+| `TROPIPAY_CLIENT_ID` | ✅ Yes | Your TropiPay API client ID | - |
+| `TROPIPAY_CLIENT_SECRET` | ✅ Yes | Your TropiPay API client secret | - |
+| `TROPIPAY_ENVIRONMENT` | ❌ No | Environment: `sandbox` or `production` | `sandbox` |
+| `TROPIPAY_BASE_URL` | ❌ No | Custom API base URL (overrides environment) | Based on environment |
+
+#### Base URL Options
+
+- **Sandbox**: `https://sandbox.tropipay.me` (default)
+- **Production**: `https://www.tropipay.com`
+- **Local Development**: `http://localhost:3001` (or your custom endpoint)
+
+> **Important Notes**:
+> - For Windows paths, use double backslashes: `"D:\\folder\\tropipay-mcp-server\\build\\index.js"`
+> - For Linux/Mac paths, use forward slashes: `"/home/user/tropipay-mcp-server/build/index.js"`
+> - The `-y` flag in npx automatically confirms package installation
+> - Make sure to run `npm run build` before using the local installation method
 
 ## 🏗️ Project Structure
 
